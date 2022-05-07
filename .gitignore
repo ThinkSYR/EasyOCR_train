@@ -107,3 +107,9 @@ ENV/
 .vscode/
 .vs/
 .idea/
+
+# sample data
+sample_data/
+trainer/sample_data/
+trainer/saved_models/
+trainer/config_files/
