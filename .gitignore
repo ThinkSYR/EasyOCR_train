@@ -112,4 +112,4 @@ ENV/
 sample_data/
 trainer/sample_data/
 trainer/saved_models/
-trainer/config_files/
+trainer/ckp/

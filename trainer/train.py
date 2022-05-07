@@ -25,7 +25,7 @@ def count_parameters(model):
         param = parameter.numel()
         #table.add_row([name, param])
         total_params+=param
-        print(name, param)
+        # print(name, param)
     print(f"Total Trainable Params: {total_params}")
     return total_params
 
@@ -68,6 +68,13 @@ def train(opt, show_number = 2, amp=False):
 
     if opt.saved_model != '':
         pretrained_dict = torch.load(opt.saved_model)
+        # 合并模型的参数
+        # m_dict = model.state_dict()
+        # update_dict = m_dict.copy()
+        # for k, v in m_dict.items():
+        #     if k in pretrained_dict.keys():
+        #         update_dict[k] = pretrained_dict[k]
+        # pretrained_dict = update_dict
         if opt.new_prediction:
             model.Prediction = nn.Linear(model.SequenceModeling_output, len(pretrained_dict['module.Prediction.weight']))  
         
@@ -100,7 +107,10 @@ def train(opt, show_number = 2, amp=False):
                 if 'weight' in name:
                     param.data.fill_(1)
                 continue
-        model = torch.nn.DataParallel(model).to(device)
+        if opt.multi_gpu:
+            model = torch.nn.DataParallel(model).to(device)
+        else:
+            model = model.to(device)
     
     model.train() 
     print("Model:")
